@@ -1,0 +1,3 @@
+# DROPEX
+
+SIH PROJECT 2023 BASED ON DRONES with Ministry of Defence
