@@ -1,24 +1,23 @@
 """
 THIS FILE IS TO CONVERT THE ANNOTATIONS FROM JSON TO TXT
 THE TXT FILE WILL BE USED TO TRAIN THE YOLOv4 MODEL
-THERE ARE 3 DATASET FOLDERS: normal, rotated and output
-EACH FOLDER CONTAINS 2 SUBFOLDERS: images and annotations
+THERE ARE 3 DATASET DIRECTORIES: normal, rotated and output
+EACH FOLDER CONTAINS 2 FOLDERS: images and annotations
 THE IMAGES FOLDER CONTAINS THE IMAGES
 THE ANNOTATIONS FOLDER CONTAINS THE JSON FILES and NEW TXT FILES
 EACH TEXT FILE CONTAINS THE ANNOTATIONS FOR EACH IMAGE IN THIS FORMAT:
-# >>> class x_center y_center width height
+-> class x_center y_center width height
 """
-import json
 import os
 from pathlib import Path
 import pandas as pd
-import numpy as np
 
-def json_to_txt(json_file: Path, data_path: Path):
+
+def json_to_txt(json_file: Path | str, data_path: Path):
     """
     THIS FUNCTION CONVERTS THE JSON FILE TO TXT FILE
-    :param json_file: THE JSON FILE
-    :param txt_file: THE TXT FILE
+    :param data_path:
+    :param json_file: THE JSON FILE | str (Absolute Path)
     :return: NONE
     """
     # with open(json_file) as f:
@@ -46,15 +45,17 @@ def json_to_txt(json_file: Path, data_path: Path):
 
     print("Total images not found: ", c)
 
-def main():
+
+def main(work_dir: Path = Path.cwd()):
     """
-    CREATE THE TXT FILES FOR THE NORMAL DATASET
+    CREATE THE TXT FILES FOR THE ROTATE_JSON
+    ( USE THE PRE_PROCESSED JSON FILES in final/annotations/ if you don't need to slant angle)
+    :param work_dir: THE WORKING DIRECTORY | Path
     :return: NONE
     """
-    # print(os.getcwd())
-    os.chdir('datasets/output/')
+    # SET THE WORKING DIRECTORY
+    os.chdir(work_dir)
 
-    # print(os.getcwd())
     data_split_dir = os.listdir(os.getcwd())
     print(data_split_dir)
     for folder_index, json_file in enumerate(Path(data_split_dir[0]).glob('*.json'), 1):
@@ -63,12 +64,8 @@ def main():
         annotation_dir = Path(data_split_dir[folder_index]) / 'txt_annotations'
         if not annotation_dir.exists():
             annotation_dir.mkdir(parents=True, exist_ok=True)
+        # convert json to txt using pandas and save in new annotation_dir
         json_to_txt(json_file, annotation_dir)
-    #
-
-    #     txt_file = json_file.with_suffix('.txt')
-    #     json_to_txt(json_file, txt_file)
-    #     print(f'Created {txt_file}')
 
 
 if __name__ == '__main__':
