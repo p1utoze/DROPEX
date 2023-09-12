@@ -13,7 +13,7 @@ if root_path not in sys.path:
     sys.path.append(str(root_path))
 
 # Get the relative path of the root directory with respect to the current working directory
-ROOT = root_path.relative_to(Path.cwd())
+ROOT = project_path.relative_to(Path.cwd())
 
 # Sources
 IMAGE = 'Image'
@@ -25,8 +25,8 @@ YOUTUBE = 'YouTube'
 SOURCES_LIST = [IMAGE, VIDEO, WEBCAM, RTSP, YOUTUBE]
 
 # Images config
-IMAGES_DIR = ROOT / 'images'
-DEFAULT_IMAGE = IMAGES_DIR / 'office_4.jpg'
+IMAGES_DIR = ROOT / 'webapp' / 'examples' / 'images'
+DEFAULT_IMAGE = IMAGES_DIR / 'flood1.jpg'
 DEFAULT_DETECT_IMAGE = IMAGES_DIR / 'office_4_detected.jpg'
 
 # Videos config
@@ -42,9 +42,10 @@ VIDEOS_DICT = {
 
 # ML Model config
 MODEL_DIR = ROOT / 'weights'
-DETECTION_MODEL = MODEL_DIR / 'yolov8n.pt'
+DETECTION_MODEL = MODEL_DIR / 'best.pt'
+DETECTION_MODEL_ONNX = MODEL_DIR / 'best.onnx'
 SEGMENTATION_MODEL = MODEL_DIR / 'yolov8n-seg.pt'
 
 # Webcam
 WEBCAM_PATH = 0
-print(root_path)
+# print(MODEL_DIR, DETECTION_MODEL)
