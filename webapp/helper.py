@@ -2,7 +2,7 @@ import gradio as gr
 from ultralytics import YOLO
 from pathlib import Path
 import cv2
-from pytube import YouTube
+# from pytube import YouTube
 import settings
 
 
