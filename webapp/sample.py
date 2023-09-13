@@ -22,5 +22,30 @@ def predict(inp):
 gr.Interface(fn=predict,
              inputs=gr.Image(type="pil"),
              outputs=gr.Label(num_top_classes=3),
-             examples=["/examples/images/gettyimages-1167778792-612x612.jpg",
-                       "examples/images/gettyimages-1217797742-612x612.jpg"]).launch()
+             examples=["webapp/examples/images/flood1.jpg",
+                       "webapp/examples/images/flood2.jpg"])
+
+import cv2
+
+# define a video capture object
+vid = cv2.VideoCapture(0)
+
+while (True):
+
+    # Capture the video frame
+    # by frame
+    ret, frame = vid.read()
+
+    # Display the resulting frame
+    cv2.imshow('frame', frame)
+
+    # the 'q' button is set as the
+    # quitting button you may use any
+    # desired button of your choice
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# After the loop release the cap object
+vid.release()
+# Destroy all the windows
+cv2.destroyAllWindows()

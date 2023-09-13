@@ -3,6 +3,9 @@ from pathlib import Path
 import PIL
 from webapp import settings, helper
 
+classes = {0.0: 'Person', 1.0: 'Car', 2.0: 'Bicycle', 3.0: 'OtherVehicle', 4.0: 'DontCare'}
+
+
 def object_detection(image, confidence):
     model_path = Path(settings.DETECTION_MODEL)
     # Load Pre-trained ML Model
@@ -10,12 +13,9 @@ def object_detection(image, confidence):
         model = helper.load_model(model_path)
         results = model(image, conf=confidence)
         boxes = results[0].boxes
-        try:
-            print(results[0])
-        except Exception as e:
-            print(e, "Wrong get attribute")
         res_plotted = results[0].plot()[:, :, ::-1]
-        return res_plotted, [box.data for box in boxes]
+        print(res_plotted)
+        return res_plotted, [classes[box.cls.item()] for box in boxes]
     except Exception as ex:
         print(f"Unable to load model. Check the specified path: {model_path}\n{ex}")
 
@@ -30,8 +30,8 @@ iface = gr.Interface(
         gr.components.Image(type="pil", label="Detected Image"),
         gr.components.Textbox(type="text", label="Detection Results")
     ],
-    title="Object Detection using YOLOv8",
-    description="A Gradio interface for object detection using YOLOv8."
+    title="HUMAN Detection using YOLOv8 with Thermal SENSOR",
+    description="A Gradio interface for object detection using YOLOv8. model on thermal image snapshots"
 )
 
 
