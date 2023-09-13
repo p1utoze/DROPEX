@@ -6,6 +6,7 @@ from webapp import settings, helper
 # YoLo Model Classes
 classes = {0.0: 'Person', 1.0: 'Car', 2.0: 'Bicycle', 3.0: 'OtherVehicle', 4.0: 'DontCare'}
 
+
 def object_detection(video, confidence):
     """
         Parameters:
@@ -30,9 +31,8 @@ def object_detection(video, confidence):
     except Exception as ex:
         print(f"Unable to load model. Check the specified path: {model_path}\n{ex}")
 
-def flip(im):
-    return np.flipud(im)
 
+# Create a Gradio interface
 iface = gr.Interface(
     fn=object_detection,
     inputs=[
