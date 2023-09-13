@@ -1,3 +1,3 @@
-# DROPEX
+# DROPEX - Disaster Rescue Operations and Probing With EXpert-drones
 
-SIH PROJECT 2023 BASED ON DRONES with Ministry of Defence
+SIH 2023 Project Based on Drones | Domain: Defence
