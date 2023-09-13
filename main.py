@@ -50,6 +50,7 @@ def predict_webcam(capture=cv2.VideoCapture(0), rtsp=False):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+
 if __name__ == '__main__':
     # image_path = settings.DATASETS_DIR / 'normal_json' / 'val' / '0_60_60_0_01717.jpg'
     # predict_image(image_path)

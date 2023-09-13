@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import onnxruntime
 import settings
-from helper import xywh2xyxy, draw_detections, multiclass_nms
+from utils import xywh2xyxy, draw_detections, multiclass_nms
 
 
 class YOLOv8:
