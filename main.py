@@ -29,9 +29,12 @@ def predict_image(image_path: Path | str = settings.DATASETS_DIR / 'normal_json'
 
     Returns:
         None
+
+    Notes:
+         OPTIONAL CONFIG: Please install imread_from_url package
+         img_url = "https://live.staticflickr.com/13/19041780_d6fd803de0_3k.jpg"
+         img = imread_from_url(img_url)
     """
-    img_url = "https://live.staticflickr.com/13/19041780_d6fd803de0_3k.jpg"
-    # img = imread_from_url(img_url)
     image = cv2.imread(str(image_path))
     # capDetect Objects
     yolov8_detector(image)
@@ -40,12 +43,13 @@ def predict_image(image_path: Path | str = settings.DATASETS_DIR / 'normal_json'
     combined_img = yolov8_detector.draw_detections(image)
     cv2.namedWindow("Output", cv2.WINDOW_KEEPRATIO)
     cv2.imshow("Output", combined_img)
-    cv2.waitKey(0)
+    if cv2.waitKey(1) == ord('q'):
+        exit(0)
 
 
 def predict_mjpeg():
-    video_url = input("Enter MJPEG URL: ")
-    stream = urllib.request.urlopen(video_url)
+    mjpeg_url = input("Enter MJPEG URL: ")
+    stream = urllib.request.urlopen(mjpeg_url)
     byte_arr = bytes()
     cv2.namedWindow("Detected Objects", cv2.WINDOW_FULLSCREEN)
     while True:
@@ -90,9 +94,9 @@ def predict_webcam(capture=cv2.VideoCapture(0), rtsp=False):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-def youtube():
-    videoUrl = 'https://youtu.be/Snyg0RqpVxY'
-    cap = cap_from_youtube(videoUrl, resolution='720p')
+
+def youtube(videourl: str = 'https://youtu.be/Snyg0RqpVxY'):
+    cap = cap_from_youtube(videourl, resolution='720p')
     start_time = 5  # skip first {start_time} seconds
     cap.set(cv2.CAP_PROP_POS_FRAMES, start_time * cap.get(cv2.CAP_PROP_FPS))
 
@@ -124,7 +128,19 @@ def youtube():
 
 
 if __name__ == '__main__':
+    source = int(input("ENTER THE INPUT SOURCE TYPE: 1. Static-Image\n2.Webcam\n3.Youtube\n4.MJPEG"))
+    match source:
+        case 1:
+            image_path = input("Enter image path (Press ENTER for default): ")
+            predict_image(image_path) if image_path else predict_image()
+        case 2:
+            cap_source = input("Enter source path (Default for device webcam):")
+            is_rtsp = input("IS IT RTSP url (y/n):").lower()
+            predict_webcam(rtsp=True) if is_rtsp else predict_webcam(cv2.VideoCapture(cap_source))
+        case 3:
+            video_url = input("Enter Youtube Video URL (Press ENTER for default):")
+            youtube(video_url) if video_url else youtube()
+        case 4:
+            mjpeg = input("Enter MJPEG video URL (Press ENTER for default):")
+            predict_mjpeg()
 
-    # predict_image(image_path)
-    predict_mjpeg()
-    # predict_webcam(rtsp=True)
