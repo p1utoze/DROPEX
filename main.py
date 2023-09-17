@@ -1,3 +1,8 @@
+"""
+
+"""
+from pathlib import Path
+
 import cv2
 import numpy as np
 import urllib.request
@@ -16,18 +21,26 @@ os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 yolov8_detector = YOLOv8(model_path, conf_thres=0.5, iou_thres=0.5)
 
 
-def predict_image(image_path):
-        img_url = "https://live.staticflickr.com/13/19041780_d6fd803de0_3k.jpg"
-        # img = imread_from_url(img_url)
-        image = cv2.imread(str(image_path))
-        # capDetect Objects
-        yolov8_detector(image)
+def predict_image(image_path: Path | str = settings.DATASETS_DIR / 'normal_json' / 'val' / '0_60_60_0_01717.jpg'):
+    """
+    This function displays bounding box from a given static image loaded from the disk.
+     Args:
+        image_path (Optional): Default image is taken from the 'datasets' folder in this repository
 
-        # Draw detections
-        combined_img = yolov8_detector.draw_detections(image)
-        cv2.namedWindow("Output", cv2.WINDOW_KEEPRATIO)
-        cv2.imshow("Output", combined_img)
-        cv2.waitKey(0)
+    Returns:
+        None
+    """
+    img_url = "https://live.staticflickr.com/13/19041780_d6fd803de0_3k.jpg"
+    # img = imread_from_url(img_url)
+    image = cv2.imread(str(image_path))
+    # capDetect Objects
+    yolov8_detector(image)
+
+    # Draw detections
+    combined_img = yolov8_detector.draw_detections(image)
+    cv2.namedWindow("Output", cv2.WINDOW_KEEPRATIO)
+    cv2.imshow("Output", combined_img)
+    cv2.waitKey(0)
 
 
 def predict_mjpeg():
@@ -83,8 +96,6 @@ def youtube():
     start_time = 5  # skip first {start_time} seconds
     cap.set(cv2.CAP_PROP_POS_FRAMES, start_time * cap.get(cv2.CAP_PROP_FPS))
 
-    # out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), cap.get(cv2.CAP_PROP_FPS), (3840, 2160))
-
     # Initialize YOLOv7 model
     model_path = "models/yolov8m.onnx"
     yolov8_detector = YOLOv8(model_path, conf_thres=0.5, iou_thres=0.5)
@@ -111,8 +122,9 @@ def youtube():
         combined_img = yolov8_detector.draw_detections(frame)
         cv2.imshow("Detected Objects", combined_img)
 
+
 if __name__ == '__main__':
-    # image_path = settings.DATASETS_DIR / 'normal_json' / 'val' / '0_60_60_0_01717.jpg'
+
     # predict_image(image_path)
     predict_mjpeg()
     # predict_webcam(rtsp=True)
